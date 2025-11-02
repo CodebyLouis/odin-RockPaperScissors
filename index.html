@@ -3,10 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Paper Scissors by Louis R</title>
-    <script src="script.js"></script>
-</head>
+    <title>DBZ : Doumbe Baki Zebo</title>
+    <link rel ="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    </head>
 <body>
+
+    <div class="heading">
+        <h1>PICK YOUR CHAMP</h1>
+        <p>5 to wins the belt</p>
+    </div>
+    <div class="selection-container">
+        <div class="player-side">
+            <div class="fighter-info" id="player-bg">
+                <div class="fighter-firstname">Pick</div>
+                <div class = "fighter-nickname">Your</div>
+                <div class="fighter-lastname">Champ</div>
+            </div>
+
+            <div class=selection-screen-player>
+                <div class="fighter-selection">
+                    <div class="fighter-card" 
+                        data-fighter="Doumbe"
+                        data-firstname = "Cédric"
+                        data-pseudo = "The Best"
+                        data-lastname = "Doumbe"><img src = "Images/PP/DOUMBE PP.png"></div>
+
+                    <div class="fighter-card" 
+                    data-fighter="Baki"
+                    data-firstname = "Baïssangour"
+                    data-pseudo = "Baki"
+                    data-lastname = "Chamsoudinov"
+                    ><img src = "Images/PP/BAKI PP.png"></div>
+
+                    <div class="fighter-card" 
+                    data-fighter="Zebo"
+                    data-firstname = "Jordan"
+                    data-pseudo = "Le Fauve"
+                    data-lastname = "Zebo"
+                    ><img src = "Images/PP/ZEBO PP.png"></div>
+                </div>
+            </div>
+        </div>
+        <div class="right-side">
+            <button class="fight"> Fight ! </button>
+            <div class="stats">
+                <div class="stat-item human_score">
+                    <div class="stat-value">0</div>
+                    <div class="stat-title">WINS</div>
+                </div>
+                <div class="stat-item computer_score">
+                    <div class="stat-value">0</div>
+                    <div class="stat-title">LOOSES</div>
+                </div>
+                <div class="stat-item draw_score">
+                    <div class="stat-value">0</div>
+                    <div class="stat-title">DRAWS</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="choice">
+        <button id="rock">Rock</button>
+        <button id="paper">Paper</button>
+        <button id="scissors">Scissors</button>
+    </div>
+    <div class="result"></div>
+    <div class="score">
+        <div class="Sta"> STATS</div>
+        <div class="human_score">0</div>
+        <div class="computer_score">0</div>
+    </div>
+    <button id="restart" style="display: none;">Restart</button>
     
 </body>
 </html>
