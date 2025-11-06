@@ -5,122 +5,209 @@ function getComputerChoice() {
         return "Doumbe";
     }
     else if (choice >1/3 && choice <=2/3) {
-        return "Paper";
+        return "Zebo";
     }  
     else {
-        return "Scissors";
+        return "Baki";
     }
 
 }
 
 let humanScore = 0;
 let computerScore = 0;
+let drawScore = 0;
+let isLocked = false;
+let fighterChoice = "";
+let clipLink = ""
 
 function playRound (humanChoice,computerChoice) {
     if (humanChoice === computerChoice){
+        drawScore++;
+        clipLink = "Images/GIF/DRAW.gif"
         return "It's a tie";
     }
-    else if (humanChoice === "Rock" && computerChoice ==="Scissors") {
+    else if (humanChoice === "Doumbe" && computerChoice ==="Zebo") {
         humanScore++;
-        return "You win! Rock beats Scissors";
+        clipLink = "Images/GIF/DOUMBE ZEBO.gif"
+        return "You win!";
     }
-    else if (humanChoice === "Scissors" && computerChoice ==="Paper") {
+    else if (humanChoice === "Baki" && computerChoice ==="Doumbe") {
         humanScore++;
-        return "You win! Scissors beats Paper";
+        clipLink = "Images/GIF/BAKI DOUMBE.gif";
+        return "You win!";
     }
-    else if (humanChoice === "Paper" && computerChoice ==="Rock") {
+    else if (humanChoice === "Zebo" && computerChoice ==="Baki") {
         humanScore++;
-        return "You win! Paper beats Rock";
+        clipLink="Images/GIF/ZEBO BAKI.gif";
+        return "You win!";
     }
-    else {
+    else if (humanChoice ==="Doumbe" && computerChoice ==="Baki") {
+        clipLink = "Images/GIF/BAKI DOUMBE.gif";
+        computerScore++;
+        return "You loose!"
+    }
+    else if (humanChoice ==="Baki" && computerChoice ==="Zebo") {
+        clipLink="Images/GIF/ZEBO BAKI.gif";
+        computerScore++;
+        return "You loose!"
+    }
+        else if (humanChoice ==="Zebo" && computerChoice ==="Doumbe") {
+        clipLink = "Images/GIF/DOUMBE ZEBO.gif"
         computerScore++;
         return "You loose!"
     }
 
 }
 
-const rock = document.querySelector("#rock");
-const paper = document.querySelector("#paper");
-const scissors = document.querySelector("#scissors");
-const humanScoreDiv = document.querySelector(".human_score .stat-value");
-const computerScoreDiv = document.querySelector(".computer_score .stat-value");
-const restartBtn = document.querySelector("#restart");
+const fightBtn = document.querySelector(".fight-button");
+const lineFight = document.querySelectorAll(".line");
+const winsScoreDiv = document.querySelector(".wins_score .stat-value");
+const loosesScoreDiv = document.querySelector(".looses_score .stat-value");
+const drawsScoreDiv = document.querySelector(".draws_score .stat-value");
+const restartBtn = document.querySelector(".restart-button");
 const resultDiv = document.querySelector(".result");
-
-function handleClick (playerChoice) {
-    const result = playRound (playerChoice,getComputerChoice());
-    resultDiv.textContent = result
-    humanScoreDiv.textContent = humanScore;
-    computerScoreDiv.textContent = computerScore;
-
-    if (humanScore === 2 || computerScore === 2 ){
-        rock.disabled = true;
-        paper.disabled = true;
-        scissors.disabled = true;
-        restartBtn.style.display = "block";
-    }
-}
+const gameInfo = document.querySelector(".game-info");
+const fightContainer = document.querySelector(".fight-container")
+const gifFight = document.querySelector(".gif-fight") ;
+const resultOverlay = document.querySelector(".result-overlay");
+const resultText = document.querySelector(".result-text");
 
 restartBtn.addEventListener("click",() => {
-    humanScore = 0
-    computerScore = 0
-    humanScoreDiv.textContent = humanScore
-    computerScoreDiv.textContent = computerScore
-    rock.disabled = false;
-    paper.disabled = false;
-    scissors.disabled = false;
-    restartBtn.style.display = "none";
-    resultDiv.textContent = "";
+    humanScore = 0;
+    computerScore = 0;
+    drawScore = 0;
+    winsScoreDiv.textContent = humanScore;
+    loosesScoreDiv.textContent = computerScore;
+    drawsScoreDiv.textContent = drawScore;
+    fightBtn.disabled=true;
+    restartBtn.style.display="none";
+    lineFight.forEach(line =>{
+        line.style.backgroundColor = "gray";
+    })
+    fightBtn.style.display = "inline-block";
+
+    fighterCards.forEach(card => {
+        card.style.pointerEvents = "auto";
+        card.classList.remove("locked", "selected"); 
+    });
+
+    isLocked = false;  
+
+    fighterBg.src = "Images/Default.png";
+    fighterFirstName.textContent = originalFirstName;
+    fighterNickName.textContent = originalNickName;
+    fighterLastName.textContent = originalLastName;
+    fighterBg.classList.remove("selected");
+
+})
+
+if(isLocked === false){
+    fightBtn.disabled = true;
+}
+
+fightBtn.addEventListener("click",() => {
+    const result = playRound(fighterChoice,getComputerChoice());
+    winsScoreDiv.textContent = humanScore;
+    loosesScoreDiv.textContent = computerScore;
+    drawsScoreDiv.textContent = drawScore;
+    gifFight.src=clipLink;
+    gameInfo.style.display="none";
+    fightContainer.style.display="block";
+    console.log(clipLink)
+
+    let overlayClass = "";
+    let text = "";
+    
+    if (result === "You win!") {
+        overlayClass = "win";
+        text = "YOU WIN!";
+    } else if (result === "You loose!") {
+        overlayClass = "lose";
+        text = "YOU LOSE!";
+    } else {
+        overlayClass = "draw";
+        text = "DRAW!";
+    }
+    
+    // Affiche l'overlay immédiatement
+    resultText.textContent = text;
+    resultOverlay.className = "result-overlay show " + overlayClass;
+    
+    // Cache l'overlay après 1.5 secondes
+    setTimeout(() => {
+        resultOverlay.classList.remove("show");
+    }, 1500);
+    
+
+    if ((humanScore + drawScore + computerScore)===5 ){
+        fightBtn.disabled = true;
+        fightBtn.style.display = "none";
+        lineFight.forEach(line =>{
+        line.style.backgroundColor = "#052383";
+    })
+
+    fighterCards.forEach(card => {
+        card.style.pointerEvents = "none"; 
+    });
+         
+    }
+    if((humanScore + drawScore + computerScore)===5){
+    restartBtn.style.display = "inline-block";
+    }
 })
 
 
 
-rock.addEventListener("click" , () => {handleClick("Rock")})
-paper.addEventListener("click" , () =>{handleClick("Paper")})
-scissors.addEventListener("click" , () =>{handleClick("Scissors")})
-
+/* -------- FIGHTER SELECTION VISUAL ---------*/
 const fighterCards = document.querySelectorAll(".fighter-card");
 const fighterFirstName = document.querySelector(".fighter-firstname");
 const fighterNickName = document.querySelector(".fighter-nickname");
 const fighterLastName = document.querySelector(".fighter-lastname");
-const fighterBg = document.querySelector(".player-side")
+const fighterBg = document.querySelector(".fighter-img")
 const originalFirstName = fighterFirstName.textContent;
 const originalNickName = fighterNickName.textContent;
 const originalLastName = fighterLastName.textContent;
-let isLocked = false;
-let fighterChoice = "";
+
+
 
 /* FIGHTER CARDS HOVER / RELEASE / CLICK */
 fighterCards.forEach(cards => {
     cards.addEventListener("mouseenter",function (){
         if (!isLocked) {
         const fighterName = cards.dataset.fighter;
-        fighterBg.style.backgroundImage =`url("Images/${fighterName}.png")`;
+        fighterBg.src =`Images/${fighterName}.png`;
         fighterFirstName.textContent = cards.dataset.firstname;
         fighterNickName.textContent = `" ${cards.dataset.pseudo} "`;
         fighterLastName.textContent = cards.dataset.lastname;   
-
+        fighterBg.classList.add("hovered");
        }
 });
     cards.addEventListener("click",function(){
         fighterCards.forEach(card => {
-            card.classList.add("locked");
-            card.style.border = "3px solid transparent";
-            card.style.boxShadow = "none";
-            card.style.filter = "saturate(0.2)";
+            card.classList.remove("selected");  
+            card.classList.add("locked");       
         
         });
+        lineFight.forEach(line =>{
+            line.style.backgroundColor = "#ff0404";
+         })
+        fighterBg.classList.add("selected");
+        fighterBg.classList.remove("hovered");
+        
         const fighterName = cards.dataset.fighter;
-        cards.style.border="3px solid blue";
-        cards.style.boxShadow="0 0 20px 6px blue, 0 0 40px 12px blue inset";
-        cards.style.filter = "saturate(1)";
-        fighterBg.style.backgroundImage =`url("Images/${fighterName}.png")`
+        cards.classList.add("selected");
+        fighterBg.src =`Images/${fighterName}.png`
         fighterFirstName.textContent = cards.dataset.firstname;
         fighterNickName.textContent = `" ${cards.dataset.pseudo} "`;
         fighterLastName.textContent = cards.dataset.lastname;
         isLocked = true;
         fighterChoice = fighterName;
-        console.log(fighterName)
+
+
+        if (humanScore < 2 && computerScore < 2) {
+        fightBtn.disabled = false;
+    }
+
     });   
 });
 
@@ -129,11 +216,11 @@ const fighterSelection = document.querySelector(".fighter-selection")
 
      fighterSelection.addEventListener("mouseleave",function (){
         if (!isLocked){
-        fighterBg.style.backgroundImage =`url("Images/Default.png")`
+        fighterBg.src ="Images/Default.png";
         fighterFirstName.textContent = originalFirstName;
         fighterNickName.textContent = originalNickName;
         fighterLastName.textContent = originalLastName;
+        fighterBg.classList.remove("hovered");
         }
         
 })
-
